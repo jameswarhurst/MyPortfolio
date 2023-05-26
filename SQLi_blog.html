@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+          max-width: 500px;
+          margin: 0 auto;
+          padding: 20px;
+          text-align: center;
+        }
+        h2 {
+          margin-top: 30px;
+        }
+        h3 {
+          margin-top: 20px;
+        }
+        p {
+          margin-top: 10px;
+          text-align: justify;
+        }
+        li{
+            margin-top: 6px;
+            text-align: justify;
+        }
+      </style>
+</head>
+<body>
+    <header>
+    </header>
+
+    <main>
+        <!-- Include your blogs section -->
+        <section id="blogs">
+            <div class="blogs-container">
+                <div class="main-title">
+                    <h2>SQL <span>Injection</span><span class="bg-text">SQL Injection</span></h2>
+                </div>
+                <div class="blog-post" style="text-align: left; display: block;">
+                    <!DOCTYPE html>
+<html>
+<head>
+  <title>SQL Injection</title>
+</head>
+<body>
+   
+  <p style="margin-top: 85px;">Welcome to my 1st Cyber Security blog post. I hope you enjoy the read and come away with a deep understanding of SQL Injection vulnerabilities. This blog will teach you the following.</p>
+    
+    <style>
+      ul.custom-list {
+        color: #27AE60;
+        padding-left: 20px;
+      }
+      ul.custom-list li::before {
+        content: "\2022"; /* Bullet point symbol */
+        display: inline-block;
+        width: 10px;
+        margin-left: -20px;
+      }
+    </style>
+    
+    <ul class="custom-list">
+      <li style="color: #27AE60">What is SQL Injection?</li>
+      <li style="color: #27AE60">When was it discovered?</li>
+      <li style="color: #27AE60">What is the root cause of the vulnerability?</li>
+      <li style="color: #27AE60">Testing for SQL Injection via my Python and SQL lab</li>
+      <li style="color: #27AE60">How can we defend against the vulnerability?</li>
+      <li style="color: #27AE60">SQLi Payloads</li>
+      <li style="color: #27AE60">Using defence mechanisms to defend a simple Python application from SQL Injection</li>
+      <li style="color: #27AE60">Testing for SQL Injection via 3rd party penetration testing tools such as BurpSuite</li>
+    </ul>
+  
+    <p>Once these topics have been uncovered, I’ll be providing you with a test lab in Python which will have a simple login page which is vulnerable to SQL Injection. The login page has the user ‘admin’, and the password field is intentionally vulnerable for educational purposes so you can get a feel of how the vulnerability is exploited. A list of payloads will be provided to test against your own applications. Once we have a better understanding of the vulnerability, there is a video at the end of the blog that will teach you how to perform this on other labs made by our Cyber Security community (PortSwigger) which uses 3rd party tools such as BurpSuite. Enjoy the read!</p>
+  
+    <h2 style="color: #27AE60">What is SQL Injection?</h2>
+    <p>SQL injection is a security vulnerability which leverages insecure database design that allows attackers to execute their own arbitrary SQL commands to perform a wide range of actions such as bypassing login pages, extracting user PII from databases, and many more, which we will get into later. The vulnerability arises from improper handling of user-supplied input, such as a login field, comment box, etc., where proper validation and sanitization are often missing.</p>
+  
+    <h2 style="color: #27AE60">When was the vulnerability discovered?</h2>
+    <p>The vulnerability was first discovered by a Cyber Security researcher, Jeff Forristal, back in 1998. Since its discovery, SQL injection has remained a prominent and widespread vulnerability for attackers. It affects many platforms, and with new releases and SQL languages being created and updated, new methods of injection are often found. Although developers are becoming more aware and improving the handling of user-supplied input, SQL injection remains one of the OWASP Top 10 vulnerabilities year after year due to the vast number of applications using databases.</p>
+  
+    <h2 style="color: #27AE60">What is the underlying root cause of this vulnerability?</h2>
+    <p>The underlying root cause of SQL Injection (SQLi) is the improper handling of user-supplied input, which can be found in login fields, comment fields, etc.</p>
+  
+    <p>Example: A user inputs a comment on a blog post, such as this blog. The website must have a method of storing the user's information to display it on the webpage, usually in the form of a database such as MySQL, SQLite3, noSQL, Oracle DB, PostgreSQL, and more. When the user adds some input and hits a 'comment' button, a SQL query is executed to insert the user-supplied input into the database. This is where the attacker can manipulate the SQL query to break it and supply their own SQL code.</p>
+  
+    <p>The main three causes of this vulnerability are lack of input validation, failure to sanitize input, and lack of awareness and education.</p>
+  
+    <p>Please skip the following section if you prefer a video demonstration of the vulnerability.</p>
+  
+    <div style="display: flex; justify-content: center;">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/dJ-KW9XBAzw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+
+    <p>I'm going to share an example for a login page that has a username and password field vulnerable to SQL Injection. This will give you a better understanding of how the vulnerability is leveraged. I'll be sharing my GitHub repo for this lab. Please download this repo to your VS Code or preferred environment. Use the files called SQLLab.py & vulnerable.db.</p>
+  
+    <h2 style="color: #27AE60"><a href="https://github.com/jameswarhurst/PythonCyberSec">GitHub Repository - Click Here</a></h2>
+  
+    <p>Open SQLLab.py. On line 36, you'll find the statement that queries the database and checks if the user input matches the database, which, if it does, will authenticate the user.</p>
+  
+    <p>query = "SELECT * FROM users WHERE username='%s' AND password='%s'" % (username, password).</p>
+  
+    <p>Provide the username 'admin' and for the password, supply a malicious SQL query: ' OR '1. This closes the current SQL query and allows us to write outside of the statement, modifying the statement to look like AND password='', and then we supply OR '1', which is closed by the final quotation mark in the original built-in SQL query. We are now left with AND password='' OR '1', which means the password is equal to nothing or '1'. Since '1' means true in SQL, this allows the attacker to bypass the authentication by using their own SQL-modified query.</p>
+  
+    <h2 style="color: #27AE60">How can we defend against the vulnerability?</h2>
+    <p>Now that you have an understanding of how attackers can manipulate their input to execute SQL queries, let's dive into the defense mechanisms and best practices we can follow to strengthen the security of our websites.</p>
+  
+    <ol>
+      <li><strong>Use parameterized queries or prepared statements:</strong> Ensure that your applications use parameterized and prepared queries. This helps separate the query from the user input. When the user inputs their values, they will be passed as parameters instead of being executed as SQL code. The application treats the user input as its literal value rather than a SQL query.</li>
+      <li><strong>Input validation and sanitization:</strong> Implement input validation and sanitization to defend against SQL injection. Validate user input before execution and ensure that filters are in place to prevent unauthorized execution of SQL queries.</li>
+      <li><strong>Web Application Firewall:</strong> Deploy a web application firewall to defend against SQL injection. A web application firewall intercepts incoming requests and inspects them to ensure they are not malicious. You can set your own rules on the firewall or choose a vendor like Cloudflare that provides a built-in WAF.</li>
+      <li><strong>Least Privilege:</strong> Adhere to the basic security concept of least privilege. Ensure that the users accessing the database have the least necessary privileges. All users should have the lowest privileges required to perform their tasks on your website or application.</li>
+    </ol>
+  
+    <p>Feel free to check out the example payloads and additional learning resources below:</p>
+  
+    <h2 style="color: #27AE60">Example Payloads:</h3>
+    <p><a href="https://github.com/payloadbox/sql-injection-payload-list">GitHub - SQL Injection Payload List - Click Here</a></p>
+  
+    <h2 style="color: #27AE60">Learning Resources:</h3>
+    <ul>
+      <li><a href="https://owasp.org/www-community/attacks/SQL_Injection">OWASP - SQL Injection - Click Here</a></li>
+      <li><a href="https://portswigger.net/web-security/sql-injection">PortSwigger - SQL Injection - Click Here</a></li>
+      <li><a href="https://www.youtube.com/watch?v=ciNHn38EyRc&ab_channel=Computerphile">YouTube - SQL Injection by Computerphile - Click Here</a></li>
+    </ul>
+
+    
+    <div style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
+      <h3  style="color: #27AE60" style="margin-bottom: 10px;">Testing for SQL Vulnerabilities using BurpSuite</h3>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/nfrVNORxmpM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>    
+    
+    <div style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
+      <h3 style="color: #27AE60" style="margin-bottom: 10px;">Video Showing How to Defend Against SQL Injection</h3>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/BkKIk5PXcyU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+    
+  </body>
+</html>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Include your footer -->
+    <footer>
+        <!-- Your footer content goes here -->
+    </footer>
+
+    <!-- Include any additional scripts -->
+</body>
+</html>
